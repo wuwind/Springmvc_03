@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/Springmvc_03.iml" filepath="$PROJECT_DIR$/Springmvc_03.iml" />
+      <module fileurl="file://$PROJECT_DIR$/mweb/mweb.iml" filepath="$PROJECT_DIR$/mweb/mweb.iml" />
+    </modules>
+  </component>
+</project>
