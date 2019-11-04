@@ -13,7 +13,7 @@ import java.util.List;
 @Service
 public class UserServiceImpl implements UserService {
 
-    @Autowired
+    @Resource
     private UserDao userDao;
 
     @Override
@@ -44,8 +44,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public int delUserById(String id) {
-        return userDao.delUserById(id);
+    public int delUserById(Object id) {
+        return userDao.deleteById(id);
+    }
+
+    @Override
+    public int delUserById(List<Object> id) {
+        return userDao.deleteById(id);
     }
 
     @Override
@@ -61,6 +66,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findByUser(User user) {
         return userDao.findByUser(user);
+    }
+
+    @Override
+    public void deleteAll() {
+        userDao.deleteAll();
     }
 
 

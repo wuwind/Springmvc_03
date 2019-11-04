@@ -14,12 +14,16 @@ public interface UserService {
 
     User findUserByName(String name);
 
-    int delUserById(String id);
+    int delUserById(Object id);
+
+    int delUserById(List<Object> ids);
 
     int updateUser(User user);
 
     User getUserById(String id);
 
     User findByUser(User user);
+
+    void deleteAll();
 
 }

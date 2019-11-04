@@ -11,6 +11,8 @@
       <root url="jar://$PROJECT_DIR$/libs/javax.servlet-api-4.0.0-sources.jar!/" />
       <root url="jar://$USER_HOME$/.ideaLibSources/spring-beans-4.3.14.RELEASE-sources.jar!/" />
       <root url="jar://$USER_HOME$/.ideaLibSources/spring-context-4.3.14.RELEASE-sources.jar!/" />
+      <root url="jar://$USER_HOME$/.ideaLibSources/spring-jdbc-4.3.14.RELEASE-sources.jar!/" />
+      <root url="jar://$USER_HOME$/.ideaLibSources/spring-core-4.3.14.RELEASE-sources.jar!/" />
     </SOURCES>
     <jarDirectory url="file://$PROJECT_DIR$/web/WEB-INF/lib" recursive="false" />
   </library>

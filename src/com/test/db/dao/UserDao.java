@@ -8,7 +8,11 @@ public interface UserDao {
 
     int addUser(User user);
 
-    int delUserById(String id);
+    int deleteById(Object id);
+
+    int deleteById(List<Object> id);
+
+    int deleteAll();
 
     int updateUser(User user);
 

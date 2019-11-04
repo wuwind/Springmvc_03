@@ -46,6 +46,10 @@
     <!-- 开启注解驱动 -->
     <tx:annotation-driven transaction-manager="transactionManager"/>
 
+    <!--<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">-->
+        <!--<constructor-arg ref="dataSource" />-->
+    <!--</bean>-->
+
     <mvc:interceptors>
         <bean class="com.test.interceptor.LoginInterceptor"/>
     </mvc:interceptors>

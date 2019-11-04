@@ -13,6 +13,6 @@ public class MenuController {
     MenuService menuService;
 
     public List<Menu> getAllMenu(){
-        return null;
+        return menuService.getAllMenu();
     }
 }
