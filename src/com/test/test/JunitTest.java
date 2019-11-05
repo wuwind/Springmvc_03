@@ -1,7 +1,9 @@
 package com.test.test;
 
+import com.test.db.dao.MenuDao;
 import com.test.db.dao.UserDao;
 import com.test.db.service.UserService;
+import com.test.model.Menu;
 import com.test.model.User;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,21 +19,25 @@ public class JunitTest extends BaseJunitTest {
 
     @Autowired
     UserDao userDao;
+    @Autowired
+    MenuDao menuDao;
+
 
     @Test
-    public void delUserById(){
+    public void delUserById() {
         int i = userService.delUserById("admin");
-        System.out.println("删除i："+i);
+        System.out.println("删除i：" + i);
     }
 
 
     @Test
-    public void getUserById(){
+    public void getUserById() {
         User admin = userDao.getUserById("41");
         System.out.println(admin);
     }
+
     @Test
-    public void getAllUsers(){
+    public void getAllUsers() {
         List<User> allUsers = userService.getAllUsers();
         for (User allUser : allUsers) {
             System.out.println(allUser);
@@ -39,39 +45,45 @@ public class JunitTest extends BaseJunitTest {
     }
 
     @Test
-    public void addUser(){
+    public void addUser() {
         User user = new User();
         user.name = "admin2";
         user.password = "1234";
-         userService.addUser(user);
-         userService.addUser(user);
-         userService.addUser(user);
-         userService.addUser(user);
-         userService.addUser(user);
-         userService.addUser(user);
-         userService.addUser(user);
-         userService.addUser(user);
-         userService.addUser(user);
-         userService.addUser(user);
-         userService.addUser(user);
-         userService.addUser(user);
+        userService.addUser(user);
+        userService.addUser(user);
+        userService.addUser(user);
+        userService.addUser(user);
+        userService.addUser(user);
+        userService.addUser(user);
+        userService.addUser(user);
+        userService.addUser(user);
+        userService.addUser(user);
+        userService.addUser(user);
+        userService.addUser(user);
+        userService.addUser(user);
         int i = userService.addUser(user);
         System.out.println(i);
     }
 
 
-
     @Test
-    public void getAllMenu(){
+    public void getAllMenu() {
 //        List<Menu> allMenu = menuService.getAllMenu();
 //        for (Menu menu : allMenu) {
 //            System.out.println(menu.name);
 //        }
     }
 
+    @Test
+    public void addMenu() {
+        Menu m = new Menu();
+        m.name="人事管理";
+        m.pid = 1;
+        menuDao.add(m);
+    }
 
     @Test
-    public void delAllUser(){
+    public void delAllUser() {
 //        userService.deleteAll();
 //        userService.delUserById(42);
 
@@ -86,7 +98,7 @@ public class JunitTest extends BaseJunitTest {
     }
 
     @Test
-    public void updateUser(){
+    public void updateUser() {
         List<User> d = new ArrayList<>();
         User user = new User();
         user.id = 39;
@@ -94,7 +106,7 @@ public class JunitTest extends BaseJunitTest {
         user.password = "123456";
         d.add(user);
         int i = userDao.update(d);
-        System.out.println("修改："+i);
+        System.out.println("修改：" + i);
     }
 
 }

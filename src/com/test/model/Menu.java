@@ -1,11 +1,12 @@
 package com.test.model;
 
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import java.util.List;
 
-public class Menu extends BeanPropertyRowMapper {
+public class Menu {
     public int id;
     public String name;
     public int pid;
+    public List<Menu> children;
 
     public int getId() {
         return id;

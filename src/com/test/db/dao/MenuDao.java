@@ -4,6 +4,9 @@ import com.test.model.Menu;
 
 import java.util.List;
 
-public interface MenuDao {
+public interface MenuDao extends BaseDao<Menu>{
+
     List<Menu> getAllMenu();
+
+
 }

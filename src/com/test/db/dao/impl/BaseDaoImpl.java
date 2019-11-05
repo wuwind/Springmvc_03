@@ -32,15 +32,21 @@ public abstract class BaseDaoImpl<T> extends JdbcDaoSupport implements BaseDao<T
         tClass = getTClass();
         tbNmae = tClass.getSimpleName().toLowerCase();
         declaredFields = tClass.getDeclaredFields();
+        List<Field> fields = new ArrayList<>();
         for (Field declaredField : declaredFields) {
+            Class<?> classType = declaredField.getType();
+            if (!classType.isPrimitive() && classType != String.class) {
+                continue;
+            }
+            fields.add(declaredField);
             String name = declaredField.getName();
             if ("id".equals(name)) {
                 setIdFiele(name, declaredField);
-                break;
             } else if (null == idName && name.contains("Id")) {
                 setIdFiele(name, declaredField);
             }
         }
+        declaredFields = fields.toArray(new Field[fields.size()]);
     }
 
     private void setIdFiele(String name, Field declaredField) {
@@ -102,7 +108,7 @@ public abstract class BaseDaoImpl<T> extends JdbcDaoSupport implements BaseDao<T
                 sb.append(",");
             }
             sb.deleteCharAt(sb.length() - 1);
-//            System.out.println(sb.toString());
+            System.out.println(sb.toString());
             KeyHolder key = new GeneratedKeyHolder();
             // 往数据库插入数据并且返回主键值
             this.getJdbcTemplate().update(new PreparedStatementCreator() {

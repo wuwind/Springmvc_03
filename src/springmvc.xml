@@ -56,4 +56,5 @@
     <mvc:default-servlet-handler/>
     <!--<bean class="org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor"/>-->
 
+    <!--<mvc:resources mapping="/js/" location="/js/**"/>-->
 </beans>

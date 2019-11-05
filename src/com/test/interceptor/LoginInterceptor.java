@@ -9,8 +9,8 @@ import javax.servlet.http.HttpServletResponse;
 public class LoginInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-//        String requestURI = request.getRequestURI();
-//        System.out.println("requestURI: "+requestURI);
+        String requestURI = request.getRequestURI();
+        System.out.println("requestURI: "+requestURI);
 //        if(requestURI.equals(request.getContextPath()+"/login")) {
             return true;
 //        }

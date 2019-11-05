@@ -11,7 +11,6 @@ public class MenuDaoImpl extends BaseDaoImpl<Menu> implements MenuDao {
 
     @Override
     public List<Menu> getAllMenu() {
-        List<Menu> menus = queryList("select * from menu");
-        return menus;
+        return getAll();
     }
 }
