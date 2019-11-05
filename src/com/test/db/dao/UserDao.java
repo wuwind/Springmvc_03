@@ -14,7 +14,13 @@ public interface UserDao {
 
     int deleteAll();
 
-    int updateUser(User user);
+    int delete(User user);
+
+    int delete(List<User> user);
+
+    int update(User user);
+
+    int update(List<User> user);
 
     User getUserById(String id);
 

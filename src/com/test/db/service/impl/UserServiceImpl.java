@@ -3,7 +3,6 @@ package com.test.db.service.impl;
 import com.test.db.dao.UserDao;
 import com.test.db.service.UserService;
 import com.test.model.User;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -55,7 +54,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public int updateUser(User user) {
-        return userDao.updateUser(user);
+        return userDao.update(user);
     }
 
     @Override

@@ -1,9 +1,7 @@
 package com.test.db.dao.impl;
 
 import com.test.db.dao.BaseDao;
-import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
-import org.springframework.jdbc.core.CallableStatementCallback;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -15,7 +13,6 @@ import javax.sql.DataSource;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -26,9 +23,30 @@ import java.util.Map;
 public abstract class BaseDaoImpl<T> extends JdbcDaoSupport implements BaseDao<T> {
 
     private String tbNmae;
+    private Field[] declaredFields;
+    private String idName = null;
+    private Class<T> tClass;
+    private Field idField = null;
 
     public BaseDaoImpl() {
-        tbNmae = getTClass().getSimpleName().toLowerCase();
+        tClass = getTClass();
+        tbNmae = tClass.getSimpleName().toLowerCase();
+        declaredFields = tClass.getDeclaredFields();
+        for (Field declaredField : declaredFields) {
+            String name = declaredField.getName();
+            if ("id".equals(name)) {
+                setIdFiele(name, declaredField);
+                break;
+            } else if (null == idName && name.contains("Id")) {
+                setIdFiele(name, declaredField);
+            }
+        }
+    }
+
+    private void setIdFiele(String name, Field declaredField) {
+        idName = name;
+        idField = declaredField;
+        idField.setAccessible(true);
     }
 
     /**
@@ -50,7 +68,6 @@ public abstract class BaseDaoImpl<T> extends JdbcDaoSupport implements BaseDao<T
         throw new IllegalArgumentException("add <T> for super class please");
     }
 
-
     /**
      * 增加
      *
@@ -71,19 +88,12 @@ public abstract class BaseDaoImpl<T> extends JdbcDaoSupport implements BaseDao<T
             return null;
         try {
             T t = datas.get(0);
-            Field[] declaredFields = t.getClass().getDeclaredFields();
             StringBuilder sb = new StringBuilder();
             sb.append("insert into ").append(tbNmae).append("(");
-            String idName = null;
             for (Field declaredField : declaredFields) {
                 String name = declaredField.getName();
                 sb.append(name);
                 sb.append(",");
-                if ("id".equals(name)) {
-                    idName = "id";
-                } else if (null == idName && name.contains("Id")) {
-                    idName = name;
-                }
             }
             sb.deleteCharAt(sb.length() - 1);
             sb.append(") values");
@@ -95,12 +105,11 @@ public abstract class BaseDaoImpl<T> extends JdbcDaoSupport implements BaseDao<T
 //            System.out.println(sb.toString());
             KeyHolder key = new GeneratedKeyHolder();
             // 往数据库插入数据并且返回主键值
-            String finalIdName = idName;
             this.getJdbcTemplate().update(new PreparedStatementCreator() {
                 @Override
                 public java.sql.PreparedStatement createPreparedStatement(Connection con) throws SQLException {
                     // 做数据库持久化   插入数据
-                    return con.prepareStatement(sb.toString(), new String[]{finalIdName});
+                    return con.prepareStatement(sb.toString(), new String[]{idName});
                 }
             }, key);
             List<Map<String, Object>> keyList = key.getKeyList();
@@ -121,25 +130,20 @@ public abstract class BaseDaoImpl<T> extends JdbcDaoSupport implements BaseDao<T
         sb.append("(");
         for (int i = 0; i < declaredFields.length; i++) {
             Object v = declaredFields[i].get(o);
-            if (v instanceof String) {
-                sb.append("\"");
-                sb.append(v);
-                sb.append("\"");
-            } else {
-                sb.append(v);
-            }
+            getValue(sb, v);
             sb.append(i == declaredFields.length - 1 ? ")" : ",");
         }
     }
 
     @Override
     public T queryById(Object id) {
-        return null;
+        String sql = "select * from " + tbNmae + " where " + idName + " = " + id;
+        return getJdbcTemplate().queryForObject(sql, new BeanPropertyRowMapper<>(tClass));
     }
 
     @Override
     public List<T> queryList(String sql) {
-        return this.getJdbcTemplate().query(sql, new BeanPropertyRowMapper<>(getTClass()));
+        return this.getJdbcTemplate().query(sql, new BeanPropertyRowMapper<>(tClass));
     }
 
     @Override
@@ -151,9 +155,8 @@ public abstract class BaseDaoImpl<T> extends JdbcDaoSupport implements BaseDao<T
 
     @Override
     public int deleteById(Object id) {
-        String sql = "delete from " + tbNmae + " where id=" + id;
-        getJdbcTemplate().execute(sql);
-        return 1;
+        String sql = "delete from " + tbNmae + " where " + idName + "=" + id;
+        return delete(sql);
     }
 
     @Override
@@ -163,47 +166,99 @@ public abstract class BaseDaoImpl<T> extends JdbcDaoSupport implements BaseDao<T
         for (Object o : id) {
             sb.append(o.toString()).append(",");
         }
-        sb.replace(sb.length()-1,sb.length(),")");
+        sb.replace(sb.length() - 1, sb.length(), ")");
         String sql = sb.toString();
-        getJdbcTemplate().execute(sql);
-        return 1;
+        return delete(sql);
     }
 
     @Override
     public int delete(T t) {
-        return 0;
+        Object id = null;
+        try {
+            id = idField.get(t);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return deleteById(id);
     }
 
     @Override
     public int delete(List<T> datas) {
-        return 0;
+        if (null == datas || datas.isEmpty())
+            return 0;
+        List<Object> ids = new ArrayList<>();
+        try {
+            for (T data : datas) {
+                Object o = idField.get(data);
+                ids.add(o);
+            }
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return deleteById(ids);
     }
 
     @Override
     public int delete(String sql) {
-        return 0;
+        return getJdbcTemplate().update(sql);
     }
 
     @Override
     public int deleteAll() {
         String sql = "delete  from " + tbNmae;
-        getJdbcTemplate().execute(sql);
-        return 1;
+        return delete(sql);
     }
 
     @Override
     public int update(T data) {
+//        UPDATE user set name='123' , password = '465' where id=39
+        try {
+            StringBuilder sb = new StringBuilder();
+            sb.append("update ").append(tbNmae).append(" set ");
+            Object id = null;
+            for (Field declaredField : declaredFields) {
+                Object o = declaredField.get(data);
+                if (declaredField == idField) {
+                    id = o;
+                    continue;
+                }
+                String name = declaredField.getName();
+                sb.append(name).append("=");
+                getValue(sb, o);
+                sb.append(",");
+            }
+            sb.replace(sb.length() - 1, sb.length(), " where ");
+            sb.append(idName).append("=").append(id);
+            String sql = sb.toString();
+            return update(sql);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
         return 0;
+    }
+
+    private void getValue(StringBuilder sb, Object o) {
+        if (o instanceof String) {
+            sb.append("\"");
+            sb.append(o);
+            sb.append("\"");
+        } else {
+            sb.append(o);
+        }
     }
 
     @Override
     public int update(List<T> datas) {
-        return 0;
+        int n = 0;
+        for (T data : datas) {
+            n += update(data);
+        }
+        return n;
     }
 
     @Override
     public int update(String sql) {
-        return 0;
+        return getJdbcTemplate().update(sql);
     }
 
 }
