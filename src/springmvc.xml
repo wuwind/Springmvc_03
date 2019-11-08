@@ -13,12 +13,12 @@
         <property name="prefix" value="/WEB-INF/page/"/>
         <property name="suffix" value=".jsp"/>
     </bean>
-<!--
-    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-        <property name="defaultEncoding" value="utf-8"/>
-        <property name="maxUploadSize" value="104857600"/>
-        <property name="maxInMemorySize" value="4096"/>
-    </bean>-->
+    <!--
+        <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+            <property name="defaultEncoding" value="utf-8"/>
+            <property name="maxUploadSize" value="104857600"/>
+            <property name="maxInMemorySize" value="4096"/>
+        </bean>-->
 
 
     <!--mysql-->
@@ -47,7 +47,7 @@
     <tx:annotation-driven transaction-manager="transactionManager"/>
 
     <!--<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">-->
-        <!--<constructor-arg ref="dataSource" />-->
+    <!--<constructor-arg ref="dataSource" />-->
     <!--</bean>-->
 
     <mvc:interceptors>
@@ -57,4 +57,16 @@
     <!--<bean class="org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor"/>-->
 
     <!--<mvc:resources mapping="/js/" location="/js/**"/>-->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="maxUploadSize" value="50"/>
+    </bean>
+
+    <bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+        <property name="exceptionMappings">
+            <props>
+                <prop key="org.springframework.web.multipart.MaxUploadSizeExceededException">redirect:/error.jsp</prop>
+            </props>
+        </property>
+    </bean>
+
 </beans>

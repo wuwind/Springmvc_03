@@ -11,7 +11,9 @@
     <title>$Title$</title>
   </head>
   <body>
-  main<br/>
-  map:${requestScope.mv}
+  request:${requestScope.req}<br/>
+  sessionScope:${sessionScope.session}<br/>
+  sessionScope:${sessionScope.getSession}<br/>
+  sessionScope:${applicationScope.sc}<br/>
   </body>
 </html>
