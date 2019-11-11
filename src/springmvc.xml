@@ -58,7 +58,7 @@
 
     <!--<mvc:resources mapping="/js/" location="/js/**"/>-->
     <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-        <property name="maxUploadSize" value="50"/>
+        <property name="maxUploadSize" value="5000"/>
     </bean>
 
     <bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">

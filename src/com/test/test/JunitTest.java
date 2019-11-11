@@ -47,8 +47,8 @@ public class JunitTest extends BaseJunitTest {
     @Test
     public void addUser() {
         User user = new User();
-        user.name = "admin2";
-        user.password = "1234";
+        user.setName("admin2");
+        user.setPassword("1234");
         userService.addUser(user);
         userService.addUser(user);
         userService.addUser(user);
@@ -77,7 +77,7 @@ public class JunitTest extends BaseJunitTest {
     @Test
     public void addMenu() {
         Menu m = new Menu();
-        m.name="人事管理";
+        m.name = "人事管理";
         m.pid = 1;
         menuDao.add(m);
     }
@@ -101,9 +101,9 @@ public class JunitTest extends BaseJunitTest {
     public void updateUser() {
         List<User> d = new ArrayList<>();
         User user = new User();
-        user.id = 39;
-        user.name = "admin2";
-        user.password = "123456";
+        user.setId(39);
+        user.setName("admin2");
+        user.setPassword("123456");
         d.add(user);
         int i = userDao.update(d);
         System.out.println("修改：" + i);

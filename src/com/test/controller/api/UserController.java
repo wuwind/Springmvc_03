@@ -1,6 +1,9 @@
 package com.test.controller.api;
 
+import com.test.db.service.UserService;
+import com.test.model.User;
 import org.apache.commons.io.FileUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,6 +25,10 @@ import java.util.UUID;
 
 @Controller
 public class UserController {
+
+    @Autowired
+    private UserService userService;
+
     @RequestMapping("{page}")
     public String main(@PathVariable String page) {
         return page;
@@ -97,6 +104,21 @@ public class UserController {
         originalFilename = originalFilename.substring(originalFilename.lastIndexOf("."));
         String uuid = UUID.randomUUID().toString();
         FileUtils.copyInputStreamToFile(inputStream, new File("E:/" + uuid + originalFilename));
+        return "redirect:/index.jsp";
+    }
+
+    @RequestMapping("register")
+    public String register(User user, MultipartFile file, HttpServletRequest request) {
+        String originalFilename = file.getOriginalFilename();
+        String filename = UUID.randomUUID().toString()+originalFilename.substring(originalFilename.lastIndexOf("."));
+        String path = request.getServletContext().getRealPath("files")+"/"+filename;
+        try {
+            FileUtils.copyInputStreamToFile(file.getInputStream(), new File(path));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        user.setPhoto(filename);
+        userService.addUser(user);
         return "redirect:/index.jsp";
     }
 }

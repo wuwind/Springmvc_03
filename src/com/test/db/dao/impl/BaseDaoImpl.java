@@ -135,6 +135,7 @@ public abstract class BaseDaoImpl<T> extends JdbcDaoSupport implements BaseDao<T
     private void addVaules(StringBuilder sb, Field[] declaredFields, Object o) throws IllegalAccessException {
         sb.append("(");
         for (int i = 0; i < declaredFields.length; i++) {
+            declaredFields[i].setAccessible(true);
             Object v = declaredFields[i].get(o);
             getValue(sb, v);
             sb.append(i == declaredFields.length - 1 ? ")" : ",");

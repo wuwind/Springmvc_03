@@ -1,9 +1,18 @@
 package com.test.model;
 
 public class User {
-    public int id;
-    public String name;
-    public String password;
+    private int id;
+    private String name;
+    private String password;
+    private String photo;
+
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
+    }
 
     public int getId() {
         return id;

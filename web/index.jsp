@@ -9,13 +9,58 @@
 <html>
 <head>
     <title>Title</title>
+    <script type="text/javascript" src="js/jquery-1.7.2.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            var name;
+            var password;
+            var passwordSure;
+            $(":text:eq(0)").blur(function () {
+                if ($(this).val().trim() == "") {
+                    $(this).next().css("color", "red").html("x");
+                    name = false;
+                } else {
+                    $(this).next().css("color", "green").html("√");
+                    name = true;
+                }
+
+            });
+            $(":password:eq(0)").blur(function () {
+                if ($(this).val().match(/^\w{6,12}$/)) {
+                    $(this).next().css("color", "green").html("√");
+                    password = true;
+                } else {
+                    $(this).next().css("color", "red").html("x");
+                    password = false;
+                }
+            });
+            $(":password:eq(1)").blur(function () {
+                if ($(this).val().trim() == "" || $(this).val().trim() != $(":password:eq(0)").val().trim()) {
+                    $(this).next().css("color", "red").html("x");
+                    passwordSure = false;
+                } else {
+                    $(this).next().css("color", "green").html("√");
+                    passwordSure = true;
+                }
+            });
+            $(":submit").click(function () {
+                if (name == false || password == false || passwordSure == false || $(":file").val() == "") {
+                    alert("请填写完整");
+                    return false;
+                }
+            });
+        });
+
+    </script>
 </head>
 <body>
 <a href="download?fileName=Readme.pdf">下载</a><br/>
 
-<form enctype="multipart/form-data" action="upload" method="post">
-    name:<input type="text" name="name"/><br/>
-    file:<input type="file" name="file"/><br/>
+<form enctype="multipart/form-data" action="register" method="post">
+    name:<input type="text" name="name"/><span></span><br/>
+    photo:<input type="file" name="file"/><br/>
+    password:<input type="password" name="password"/><span></span><br/>
+    password2:<input type="password" name="password2"/><span></span><br/>
     <input type="submit" value="提交"/>
 </form>
 </body>

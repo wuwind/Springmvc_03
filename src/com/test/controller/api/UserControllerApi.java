@@ -5,7 +5,6 @@ import com.test.model.User;
 import com.test.response.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -26,7 +25,7 @@ public class UserControllerApi {
         String psw = request.getParameter("psw");
         System.out.println(name);
         System.out.println(psw);
-        System.out.println(user.name);
+        System.out.println(user.getName());
         System.out.println(request.getParameter("name"));
         User u = new User();
         u.setName("name");
